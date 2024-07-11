@@ -29,6 +29,15 @@ def ns_key(k):
         return "xmlns"
 
 
+def hur_list_string():
+    date_hours_str = ""
+    for pos_date, pos_hur in cfg.INVOICE_HUR_LINES.items():
+        if date_hours_str != "":
+            date_hours_str += "&#13;\n"  # ASCII 13 = Carriage Return
+        date_hours_str += pos_date + ": " + str(pos_hur)
+    return date_hours_str
+
+
 def create_root():
     for prefix, uri in namespaces.items():
         ET.register_namespace(prefix, uri)
@@ -46,6 +55,8 @@ def create_root():
     r_due.text = time_due_longdate
     r_itc = SE(root, "cbc:InvoiceTypeCode")
     r_itc.text = "380"
+    r_note = SE(root, "cbc:Note")
+    r_note.text = hur_list_string()
     r_dcc = SE(root, "cbc:DocumentCurrencyCode")
     r_dcc.text = "EUR"
     r_br = SE(root, "cbc:BuyerReference")
@@ -239,13 +250,13 @@ def invoice_time(date_str):
 
 
 def save_xml(root, file_path):
-    # xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml_str = ET.tostring(root, encoding="UTF-8", xml_declaration=True)
     parsed_xml = MD.parseString(xml_str)
     pretty_xml = parsed_xml.toprettyxml(indent="  ")
     with open(file_path, "w", encoding="UTF-8") as f:
-        # f.write(xml_declaration + pretty_xml)
-        f.write(pretty_xml)
+        # fix tostring breaking CR encoding
+        out_xml = pretty_xml.replace("&amp;#13;", "&#13;")
+        f.write(out_xml)
 
 
 time_now = DT.now()
