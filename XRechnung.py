@@ -9,6 +9,8 @@ import XRechnung_config as cfg
 output_file = "XRechnung_YYMMDD.xml"
 
 ### create XML
+# https://xrechnung-erstellen.com/
+# https://tools.pdf24.org/de/elektronische-rechnung-erstellen
 
 SE = ET.SubElement
 
@@ -224,11 +226,9 @@ def invoice_line(pos_id, pos_date, pos_hur):
 
 def invoice_data(root):
     root = invoice_total(root)
-    pos_id = 1
-    for pos_date, pos_hur in cfg.INVOICE_HUR_LINES.items():
-        t_il = invoice_line(pos_id, pos_date, pos_hur)
-        root.append(t_il)
-        pos_id += 1
+    pos_hur = sum(cfg.INVOICE_HUR_LINES.values())
+    t_il = invoice_line(1, time_now_longdate, pos_hur)
+    root.append(t_il)
 
     return root
 
