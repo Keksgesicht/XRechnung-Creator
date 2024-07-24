@@ -8,6 +8,8 @@ import XRechnung_config as cfg
 
 output_file = "XRechnung_YYMMDD.xml"
 
+note_kleinunternehmer = "Diese Rechnung enthält gemäß §19 (1) UStG keine Umsatzsteuer."
+
 ### create XML
 # https://xrechnung-erstellen.com/
 # https://tools.pdf24.org/de/elektronische-rechnung-erstellen
@@ -56,7 +58,7 @@ def create_root():
     r_itc = SE(root, "cbc:InvoiceTypeCode")
     r_itc.text = "380"
     r_note = SE(root, "cbc:Note")
-    r_note.text = hur_list_string()
+    r_note.text = note_kleinunternehmer + "&#13;\n" + hur_list_string()
     r_dcc = SE(root, "cbc:DocumentCurrencyCode")
     r_dcc.text = "EUR"
     r_br = SE(root, "cbc:BuyerReference")
