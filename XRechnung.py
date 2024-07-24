@@ -169,7 +169,6 @@ def invoice_total(root):
     AMOUNT_TOTAL = 0
     for pos_date, pos_hur in cfg.INVOICE_HUR_LINES.items():
         AMOUNT_TOTAL += cfg.INVOICE_HUR_FACTOR * pos_hur
-    AMOUNT_PAY = AMOUNT_TOTAL - cfg.INVOICE_ALREADY_PAYED
 
     t_tax = SE(root, "cac:TaxTotal")
     t_tax_amount = SE(t_tax, "cbc:TaxAmount", {"currencyID": "EUR"})
@@ -197,10 +196,8 @@ def invoice_total(root):
     t_tia.text = str(AMOUNT_TOTAL)
     t_ata = SE(t_lmt, "cbc:AllowanceTotalAmount", {"currencyID": "EUR"})
     t_ata.text = str(0.00)
-    t_prea = SE(t_lmt, "cbc:PrepaidAmount", {"currencyID": "EUR"})
-    t_prea.text = str(cfg.INVOICE_ALREADY_PAYED)
     t_prea = SE(t_lmt, "cbc:PayableAmount", {"currencyID": "EUR"})
-    t_prea.text = str(AMOUNT_PAY)
+    t_prea.text = str(AMOUNT_TOTAL)
 
     return root
 
