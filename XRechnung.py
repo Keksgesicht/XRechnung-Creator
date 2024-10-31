@@ -259,7 +259,7 @@ def save_xml(root, file_path):
 
 
 time_now = DT.now()
-time_due = time_now + timedelta(days=30)
+time_due = time_now + timedelta(days=10)
 
 time_start = invoice_time(list(cfg.INVOICE_HUR_LINES.keys())[0])
 time_end = invoice_time(list(cfg.INVOICE_HUR_LINES.keys())[-1])
